@@ -39,6 +39,9 @@
                 </div>
 
                 <div class="form-group row mb-3">
+                    <label class="control-label" for="raPitch">
+                        Pitch = tom, valores entre 0 e 2
+                    </label>
                     <label class="col-2 control-label" for="raPitch">Pitch (<span id="spPitch">1</span>)</label>
                     <div class="col-10">
                         <input type="range" class="form-range" id="raPitch" min="0" max="2" step="0.1" value="1">
@@ -46,6 +49,9 @@
                 </div>
 
                 <div class="form-group row mb-3">
+                    <label class="control-label" for="raRate">
+                        Rate = velocidade, valores entre 0.1 e 10
+                    </label>
                     <label class="col-2 control-label" for="raRate">Rate (<span id="spRate">1</span>)</label>
                     <div class="col-10">
                         <input type="range" class="form-range" id="raRate" min="0.1" max="10" step="0.1" value="1">
@@ -85,13 +91,22 @@
             selectedVoice = voices.value
         })
 
-        // atualiza na tela os valores selecionados
+        // atualiza na tela os valores de Pitch
         pitch.addEventListener('change', () => {
+            updatePitchLabel()
+        })
+        const updatePitchLabel = (() => {
             document.querySelector('#spPitch').innerText = pitch.value
         })
+
+        // atualiza na tela os valores de Rate
         rate.addEventListener('change', () => {
             document.querySelector('#spRate').innerText = rate.value
         })
+        const updateRateLabel = (() => {
+            document.querySelector('#spRate').innerText = rate.value
+        })
+
 
         // botao play pressiodado, então se texto e voz estiverem definidos,
         // executa a interface e desabilita os controles de tela durante a fala
@@ -131,7 +146,17 @@
             }, 200)
         }
 
+
+        // init()
+
         text.value = "O SpeechSynthesis não tem um evento para indicar quando termina de falar, mas tem uma propriedade que indica se ainda está falando. Então vamos consultar periodicamente esta propriedade para habilitar novamente os controles de tela ao final da fala"
+
+        pitch.value = 1.3
+        updatePitchLabel()
+
+        rate.value = 1.6
+        updateRateLabel()
+
     </script>
 </body>
 </html>
