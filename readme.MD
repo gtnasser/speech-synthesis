@@ -11,6 +11,7 @@ O componente [SpeechSynthesis](https://developer.mozilla.org/en-US/docs/Web/API/
 ## Funcionalidades
 
 Este projeto exemplifica como usar o recurso SpeechSynthesis, via javascript, para ler um texto.
+
 As funcionalidades são:
 - selecionar uma das vozes disponíveis no dispositivo
 - escolher o tom (*pitch*) da fala
@@ -24,7 +25,9 @@ Os comandos de tela ficam desabilitados enquanto o texto está sendo reproduzido
 
 ## Pré-requisitos
 
-Somente um navegador... A interface visual foi feita usando o [Bootstrap 5](https://getbootstrap.com/), o SpeechSynthesis é um recurso nativo do navegador e é acessado por javascript.
+Somente um navegador...
+
+O SpeechSynthesis é um recurso nativo do navegador e é acessado por javascript, a interface visual foi feita usando o [Bootstrap 5](https://getbootstrap.com/) e ícones do [Font Awesome](https://fontawesome.com/).
 
 ## Install & Run
 
