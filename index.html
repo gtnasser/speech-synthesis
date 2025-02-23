@@ -27,6 +27,22 @@
         <div class="card-body">
             <form>
 
+                <div class="form-group mb-3">
+                    <label class="col-4 control-label" for="raProperties">Properties: </label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="cbPaused" disabled>
+                        <label class="form-check-label" for="cbPaused">paused</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="" id="cbPending" disabled>
+                        <label class="form-check-label" for="cbPending">pending</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" value="1" id="cbSpeaking" disabled>
+                        <label class="form-check-label" for="cbSpeaking">speaking</label>
+                    </div>
+                </div>
+
                 <div class="form-floating mb-3">
                     <textarea class="form-control height120" placeholder="Text to Speak" id="taText"></textarea>
                     <label for="taText" class="form-label">Text to Speak</label>
@@ -72,6 +88,9 @@
         let rate = document.querySelector('#raRate')
         let selectedVoice = 0
         let voicesList
+        let speaking = document.querySelector('#cbSpeaking')
+        let pending = document.querySelector('#cbPending')
+        let paused = document.querySelector('#cbPaused')
         // objecto SpeechSynthesis
         const synth = window.speechSynthesis;
 
@@ -114,46 +133,37 @@
 
         // atualiza na tela as propriedades do speechSynthesis
         const toggleControls = (() => {
-//            synth.speaking == true ? speaking.setAttribute('checked', 1) : speaking.removeAttribute('checked')
-//            synth.pending == true ? pending.setAttribute('checked', 1) : pending.removeAttribute('checked')
-//            synth.paused == true ? paused.setAttribute('checked', 1) : paused.removeAttribute('checked')
+            synth.speaking == true ? speaking.setAttribute('checked', 1) : speaking.removeAttribute('checked')
+            synth.pending == true ? pending.setAttribute('checked', 1) : pending.removeAttribute('checked')
+            synth.paused == true ? paused.setAttribute('checked', 1) : paused.removeAttribute('checked')
 
             if (synth.speaking) {
                 voices.setAttribute('disabled', 'disabled')
+                text.setAttribute('disabled', 'disabled')
                 pitch.setAttribute('disabled', 'disabled')
                 rate.setAttribute('disabled', 'disabled')
 				speak.innerText = 'Now Speaking...'
 				speak.setAttribute('disabled', 'disabled')
-//                speak.setAttribute('disabled', 'disabled')
-//                cancel.removeAttribute('disabled')
-//                if (synth.paused) {
-//                    pause.setAttribute('disabled', 'disabled')
-//                    resume.removeAttribute('disabled')
-//                } else {
-//                    pause.removeAttribute('disabled')
-//                    resume.setAttribute('disabled', 'disabled')
-//                }
+
             } else {
                 voices.removeAttribute('disabled')
+                text.removeAttribute('disabled')
                 pitch.removeAttribute('disabled')
                 rate.removeAttribute('disabled')
                 speak.innerText = "Speak"
                 speak.removeAttribute('disabled')
-//                speak.removeAttribute('disabled')
-//                cancel.setAttribute('disabled', 'disabled')
-//                pause.setAttribute('disabled', 'disabled')
-//                resume.setAttribute('disabled', 'disabled')
             }
 
         })
 
-        // botao play pressiodado, então se texto e voz estiverem definidos,
-        // executa a interface e desabilita os controles de tela durante a fala
-        // pitch: tom, valor entre 0 e 2, default = 1
-        // rate: velocidade, valor entre 0.1 e 10, default = 1
+        // player
+
         document.querySelector('#btSpeak').addEventListener('click', (ev) => {
             ev.preventDefault();
+            // se texto e voz estiverem definidos, executa a interface e
+            // desabilita os controles de tela durante a fala
             if (text.value.length>0 && voices.selectedIndex>-1) {
+
                 let utterance = new SpeechSynthesisUtterance(text.value);
                 utterance.voice = voicesList[selectedVoice];
                 utterance.pitch = raPitch.value
@@ -177,6 +187,7 @@
 
 
         // init()
+        toggleControls()
 
         text.value = "O SpeechSynthesis não tem um evento para indicar quando termina de falar, mas tem uma propriedade que indica se ainda está falando. Então vamos consultar periodicamente esta propriedade para habilitar novamente os controles de tela ao final da fala"
 
