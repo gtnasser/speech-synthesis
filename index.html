@@ -74,7 +74,15 @@
                     </div>
                 </div>
 
-                <button class="w-100 btn btn-lg btn-primary mb-3" id="btSpeak" type="button">Speak</button>
+                <div class="form-group row mb-3">
+                    <div class="btn-group" role="group" id="raProperties" aria-label="Basic mixed styles example">
+                        <button type="button" id="btSpeak" class="btn btn-success">Speak</button>
+                        <button type="button" id="btPause" class="btn btn-warning">Pause</button>
+                        <button type="button" id="btResume" class="btn btn-primary">Resume</button>
+                        <button type="button" id="btCancel" class="btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
@@ -83,7 +91,6 @@
     <script>
         let voices = document.getElementById('seVoice')
         let text = document.querySelector('#taText')
-        let speak = document.querySelector('#btSpeak')
         let pitch = document.querySelector('#raPitch')
         let rate = document.querySelector('#raRate')
         let selectedVoice = 0
@@ -91,6 +98,11 @@
         let speaking = document.querySelector('#cbSpeaking')
         let pending = document.querySelector('#cbPending')
         let paused = document.querySelector('#cbPaused')
+        let speak = document.querySelector('#btSpeak')
+        let pause = document.querySelector('#btPause')
+        let resume = document.querySelector('#btResume')
+        let cancel = document.querySelector('#btCancel')
+
         // objecto SpeechSynthesis
         const synth = window.speechSynthesis;
 
@@ -142,16 +154,24 @@
                 text.setAttribute('disabled', 'disabled')
                 pitch.setAttribute('disabled', 'disabled')
                 rate.setAttribute('disabled', 'disabled')
-				speak.innerText = 'Now Speaking...'
-				speak.setAttribute('disabled', 'disabled')
-
+                speak.setAttribute('disabled', 'disabled')
+                cancel.removeAttribute('disabled')
+                if (synth.paused) {
+                    pause.setAttribute('disabled', 'disabled')
+                    resume.removeAttribute('disabled')
+                } else {
+                    pause.removeAttribute('disabled')
+                    resume.setAttribute('disabled', 'disabled')
+                }
             } else {
                 voices.removeAttribute('disabled')
                 text.removeAttribute('disabled')
                 pitch.removeAttribute('disabled')
                 rate.removeAttribute('disabled')
-                speak.innerText = "Speak"
                 speak.removeAttribute('disabled')
+                cancel.setAttribute('disabled', 'disabled')
+                pause.setAttribute('disabled', 'disabled')
+                resume.setAttribute('disabled', 'disabled')
             }
 
         })
@@ -184,6 +204,20 @@
             }
         })
 
+        document.querySelector('#btPause').addEventListener('click', (ev) => {
+            ev.preventDefault();
+            synth.pause();
+        })
+
+        document.querySelector('#btResume').addEventListener('click', (ev) => {
+            ev.preventDefault();
+            synth.resume();
+        })
+
+        document.querySelector('#btCancel').addEventListener('click', (ev) => {
+            ev.preventDefault();
+            synth.cancel();
+        })
 
 
         // init()
