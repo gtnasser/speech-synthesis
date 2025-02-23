@@ -72,6 +72,8 @@
         let rate = document.querySelector('#raRate')
         let selectedVoice = 0
         let voicesList
+        // objecto SpeechSynthesis
+        const synth = window.speechSynthesis;
 
         // recupera lista de vozes do dispositivo
         synth.addEventListener('voiceschanged', () => {
@@ -122,7 +124,7 @@
                 utterance.voice = voicesList[selectedVoice];
                 utterance.pitch = raPitch.value
                 utterance.rate = raRate.value
-                speechSynthesis.speak(utterance);
+                synth.speak(utterance);
                 toggleControls()
             }
         })
