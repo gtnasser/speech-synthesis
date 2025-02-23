@@ -73,17 +73,20 @@
         let selectedVoice = 0
         let voicesList
 
-        // SpeechSynthesis foi iniciado, recupera lista de vozes do dispositivo
-        window.speechSynthesis.addEventListener('voiceschanged', () => {
-            voicesList = window.speechSynthesis.getVoices()
+        // recupera lista de vozes do dispositivo
+        synth.addEventListener('voiceschanged', () => {
+            voicesList = synth.getVoices()
             console.log(voicesList)
-            voicesList.map((m, i) => {
+            voicesList
+            .filter((f) => {
+                return f.localService
+            })
+            .map((m, i) => {
                 let option = document.createElement("OPTION");
                 option.value = i
                 option.text = m.name
                 voices.appendChild(option)
             })
-
         })
 
         // armazena voz selecionada
