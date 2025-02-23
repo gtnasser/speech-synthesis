@@ -112,6 +112,40 @@
             document.querySelector('#spRate').innerText = rate.value
         })
 
+        // atualiza na tela as propriedades do speechSynthesis
+        const toggleControls = (() => {
+//            synth.speaking == true ? speaking.setAttribute('checked', 1) : speaking.removeAttribute('checked')
+//            synth.pending == true ? pending.setAttribute('checked', 1) : pending.removeAttribute('checked')
+//            synth.paused == true ? paused.setAttribute('checked', 1) : paused.removeAttribute('checked')
+
+            if (synth.speaking) {
+                voices.setAttribute('disabled', 'disabled')
+                pitch.setAttribute('disabled', 'disabled')
+                rate.setAttribute('disabled', 'disabled')
+				speak.innerText = 'Now Speaking...'
+				speak.setAttribute('disabled', 'disabled')
+//                speak.setAttribute('disabled', 'disabled')
+//                cancel.removeAttribute('disabled')
+//                if (synth.paused) {
+//                    pause.setAttribute('disabled', 'disabled')
+//                    resume.removeAttribute('disabled')
+//                } else {
+//                    pause.removeAttribute('disabled')
+//                    resume.setAttribute('disabled', 'disabled')
+//                }
+            } else {
+                voices.removeAttribute('disabled')
+                pitch.removeAttribute('disabled')
+                rate.removeAttribute('disabled')
+                speak.innerText = "Speak"
+                speak.removeAttribute('disabled')
+//                speak.removeAttribute('disabled')
+//                cancel.setAttribute('disabled', 'disabled')
+//                pause.setAttribute('disabled', 'disabled')
+//                resume.setAttribute('disabled', 'disabled')
+            }
+
+        })
 
         // botao play pressiodado, então se texto e voz estiverem definidos,
         // executa a interface e desabilita os controles de tela durante a fala
@@ -125,31 +159,21 @@
                 utterance.pitch = raPitch.value
                 utterance.rate = raRate.value
                 synth.speak(utterance);
-                toggleControls()
+
+                // O SpeechSynthesis não tem um evento para indicar quando termina de falar,
+                // mas podemos consultar periodicamente as propriedades para descobrir se
+                // ainda está falando alterar os status dos controles de tela.
+                let timer = setInterval(() => {
+                    if (!synth.speaking) {
+                        clearInterval(timer)
+                        synth.cancel();
+                    }
+                    toggleControls()
+                }, 100)
+
             }
         })
 
-        // O SpeechSynthesis não tem um evento para indicar quando termina de falar,
-        // mas tem uma propriedade que indica se ainda está falando. Então vamos
-        // consultar periodicamente esta propriedade para habilitar novamente os
-        // controles de tela no final da fala
-        toggleControls = function (){
-            speak.innerText = 'Now Speaking...'
-            speak.setAttribute('disabled', 'disabled')
-            voices.setAttribute('disabled', 'disabled')
-            pitch.setAttribute('disabled', 'disabled')
-            rate.setAttribute('disabled', 'disabled')
-            let timer = setInterval(() => {
-                if (!window.speechSynthesis.speaking) {
-                    speak.innerText = "Speak"
-                    speak.removeAttribute('disabled')
-                    voices.removeAttribute('disabled')
-                    pitch.removeAttribute('disabled')
-                    rate.removeAttribute('disabled')
-                    clearInterval(timer)
-                }
-            }, 200)
-        }
 
 
         // init()
